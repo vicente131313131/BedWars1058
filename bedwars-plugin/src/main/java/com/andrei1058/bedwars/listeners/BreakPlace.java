@@ -180,6 +180,12 @@ public class BreakPlace implements Listener {
                     e.setCancelled(true);
                     Location loc = e.getBlock().getLocation();
                     IArena a1 = Arena.getArenaByPlayer(p);
+                    // prevent starting tower close to height limit 
+                    int maxBuildY = a1.getConfig().getInt(ConfigPath.ARENA_CONFIGURATION_MAX_BUILD_Y);
+                    if (loc.getBlockY() >= maxBuildY - 8) {
+                        p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_PLACE_BLOCK));
+                        return;
+                    }
                     TeamColor col = a1.getTeam(p).getColor();
                     double rotation = (p.getLocation().getYaw() - 90.0F) % 360.0F;
                     if (rotation < 0.0D) {

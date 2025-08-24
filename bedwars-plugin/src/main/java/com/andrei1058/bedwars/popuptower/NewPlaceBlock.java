@@ -1,6 +1,8 @@
 package com.andrei1058.bedwars.popuptower;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.region.Region;
 import com.andrei1058.bedwars.arena.Arena;
@@ -13,6 +15,14 @@ public class NewPlaceBlock {
         int x = Integer.parseInt(xyz.split(", ")[0]);
         int y = Integer.parseInt(xyz.split(", ")[1]);
         int z = Integer.parseInt(xyz.split(", ")[2]);
+		IArena arena = Arena.getArenaByPlayer(p);
+		if (arena != null) {
+			int targetY = b.getY() + y;
+			int maxBuildY = arena.getConfig().getInt(ConfigPath.ARENA_CONFIGURATION_MAX_BUILD_Y);
+			if (targetY >= maxBuildY) {
+				return;
+			}
+		}
         if (b.getRelative(x, y, z).getType().equals(Material.AIR)) {
             for (Region r : Arena.getArenaByPlayer(p).getRegionsList())
                 if (r.isInRegion(b.getRelative(x, y, z).getLocation()))
